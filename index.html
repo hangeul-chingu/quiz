@@ -119,6 +119,20 @@
       font-weight: bold;
     }
 
+    /* 4번 문항의 빈칸 문장 표시 */
+    .sentence-prompt {
+      padding: 24px 16px;
+      margin: 15px 0 25px;
+      background: #eff6ff;
+      border: 2px solid #bfdbfe;
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 32px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.6;
+    }
+
     .situation {
       padding: 20px;
       margin: 15px 0 25px;
@@ -350,6 +364,11 @@
         font-size: 20px;
       }
 
+      .sentence-prompt {
+        font-size: 27px;
+        padding: 20px 12px;
+      }
+
       .choice-button {
         min-height: 68px;
         font-size: 21px;
@@ -405,6 +424,13 @@
     </div>
 
     <h2 class="question-text" id="questionText"></h2>
+
+    <!-- 4번 문항에서만 표시하는 빈칸 문장 -->
+    <div
+      id="sentenceBox"
+      class="sentence-prompt"
+      hidden
+    ></div>
 
     <div
       id="situationBox"
@@ -555,6 +581,7 @@ const questions = [
     id: 4,
     type: "audio",
     text: "문장에서 들은 단어를 고르세요.",
+    displaySentence: "저기 (   )이 있어요.",
     audio: "audio/q4_sentence.mp3",
     choices: ["달", "딸", "탈"],
     answer: "딸",
@@ -632,6 +659,9 @@ const questionNumber =
 
 const questionText =
   document.getElementById("questionText");
+
+const sentenceBox =
+  document.getElementById("sentenceBox");
 
 const situationBox =
   document.getElementById("situationBox");
@@ -796,6 +826,20 @@ function showQuestion() {
   );
 
   questionText.textContent = question.text;
+
+  /*
+    4번 문항에만 빈칸 문장을 표시합니다.
+    다른 문항에서는 표시하지 않습니다.
+  */
+
+  if (question.displaySentence) {
+    sentenceBox.textContent =
+      question.displaySentence;
+    sentenceBox.hidden = false;
+  } else {
+    sentenceBox.textContent = "";
+    sentenceBox.hidden = true;
+  }
 
   feedback.className = "feedback";
   feedback.replaceChildren();
